@@ -1,5 +1,5 @@
 from copy import deepcopy
-import imp
+import importlib.util
 import os
 
 from ml_collections import ConfigDict
@@ -7,9 +7,11 @@ from ml_collections import ConfigDict
 from octo.data.oxe.oxe_standardization_transforms import bridge_dataset_transform
 from octo.utils.spec import ModuleSpec
 
-get_base_config = imp.load_source(
-    "config", os.path.join(os.path.dirname(__file__), "../scripts/configs/config.py")
-).get_config
+_config_path = os.path.join(os.path.dirname(__file__), "../scripts/configs/config.py")
+_spec = importlib.util.spec_from_file_location("config", _config_path)
+_config_module = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_config_module)
+get_base_config = _config_module.get_config
 
 
 def update_config(config: ConfigDict, **kwargs):

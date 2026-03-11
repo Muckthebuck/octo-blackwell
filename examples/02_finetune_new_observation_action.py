@@ -148,7 +148,7 @@ def main(_):
         frozen_keys.append("BlockTransformer_0")
     tx = freeze_weights(tx, model.params, frozen_keys)
     train_state = TrainState.create(
-        rng=jax.random.PRNGKey(1234),
+        rng=jax.random.key(1234),
         model=model,
         tx=tx,
     )

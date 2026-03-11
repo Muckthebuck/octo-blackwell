@@ -4,7 +4,6 @@ from typing import Any, Optional, Sequence
 
 import jax
 from jax.experimental import multihost_utils
-from jax.experimental.compilation_cache import compilation_cache
 import jax.numpy as jnp
 import numpy as np
 
@@ -27,8 +26,8 @@ def shard_along_axis(x: Any, devices: Sequence[jax.Device], axis: int = 0) -> ja
         jax.sharding.Mesh(devices, "x"),
         jax.sharding.PartitionSpec(*([None] * axis + ["x"])),
     )
-    x = jax.tree_map(jnp.array, x)
-    return jax.tree_map(
+    x = jax.tree.map(jnp.array, x)
+    return jax.tree.map(
         lambda arr: jax.make_array_from_callback(
             arr.shape, sharding, lambda index: arr[index]
         ),
@@ -61,8 +60,8 @@ def replicate(x: Any, devices: Optional[Sequence[jax.Device]] = None) -> jax.Arr
     if devices is None:
         devices = jax.devices()
     sharding = jax.sharding.PositionalSharding(devices).replicate()
-    x = jax.tree_map(jnp.array, x)
-    return jax.tree_map(
+    x = jax.tree.map(jnp.array, x)
+    return jax.tree.map(
         lambda arr: jax.make_array_from_callback(
             arr.shape, sharding, lambda index: arr[index]
         ),
@@ -74,7 +73,7 @@ def initialize_compilation_cache(
     cache_dir=os.path.expanduser("~/.jax_compilation_cache"),
 ):
     """Initializes the Jax persistent compilation cache."""
-    compilation_cache.initialize_cache(cache_dir)
+    jax.config.update("jax_compilation_cache_dir", cache_dir)
     for logger in [logging.getLogger(name) for name in logging.root.manager.loggerDict]:
         logger.addFilter(
             lambda record: "Not writing persistent cache entry for"

@@ -1,12 +1,14 @@
 from copy import deepcopy
-import imp
+import importlib.util
 import os
 
 from ml_collections import ConfigDict, FieldReference
 
-get_base_config = imp.load_source(
-    "config", os.path.join(os.path.dirname(__file__), "config.py")
-).get_config
+_config_path = os.path.join(os.path.dirname(__file__), "config.py")
+_spec = importlib.util.spec_from_file_location("config", _config_path)
+_config_module = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_config_module)
+get_base_config = _config_module.get_config
 
 from octo.data.utils.text_processing import HFTokenizer
 from octo.model.components.action_heads import DiffusionActionHead

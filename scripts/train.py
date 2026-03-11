@@ -172,7 +172,7 @@ def main(_):
     )
 
     # set up model and initialize weights
-    rng = jax.random.PRNGKey(FLAGS.config.seed)
+    rng = jax.random.key(FLAGS.config.seed)
     rng, init_rng = jax.random.split(rng)
     model = OctoModel.from_config(
         FLAGS.config.to_dict(),
@@ -246,9 +246,9 @@ def main(_):
         (loss, info), grads = jax.value_and_grad(loss_fn, has_aux=True)(
             state.model.params, batch, dropout_rng, train=True
         )
-        grad_norm = optax.global_norm(grads)
+        grad_norm = optax.tree.norm(grads)
         updates, _ = state.tx.update(grads, state.opt_state, state.model.params)
-        update_norm = optax.global_norm(updates)
+        update_norm = optax.tree.norm(updates)
         info.update(
             {
                 "grad_norm": grad_norm,

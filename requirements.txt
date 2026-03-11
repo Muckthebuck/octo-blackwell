@@ -1,13 +1,25 @@
+# === Core ML framework (Blackwell-compatible) ===
+jax == 0.9.1
+jaxlib == 0.9.1
+flax == 0.12.5
+optax == 0.2.6
+chex == 0.1.91
+distrax == 0.1.7
+orbax-checkpoint == 0.11.33
+
+# === TensorFlow (Python 3.12 compatible) ===
+tensorflow == 2.20.0
+tensorflow_hub >= 0.14.0
+tensorflow_text == 2.20.1
+tensorflow_datasets >= 4.9.2
+tensorflow_graphics >= 2021.12.3
+
+# === Data loading (install with: pip install --no-deps "dlimp @ ...") ===
+# dlimp pins tensorflow==2.15.0 internally — must install with --no-deps
+# pip install --no-deps "dlimp @ git+https://github.com/kvablack/dlimp@5edaa4691567873d495633f2708982b42edf1972"
+
+# === General ===
 gym >= 0.26
-numpy == 1.24.3
-ml_dtypes == 0.2.0
-chex == 0.1.85
-optax == 0.1.5
-tensorflow_probability == 0.23.0
-tensorflow == 2.15.0
-jax == 0.4.20
-distrax == 0.1.5
-flax == 0.7.5
 ml_collections >= 0.1.0
 tqdm >= 4.60.0
 absl-py >= 0.12.0
@@ -17,11 +29,6 @@ einops >= 0.6.1
 imageio >= 2.31.1
 moviepy >= 1.0.3
 pre-commit == 3.3.3
-transformers >= 4.34.1
-tensorflow_hub >= 0.14.0
-tensorflow_text >= 2.13.0
-tensorflow_datasets == 4.9.2
-tensorflow_graphics == 2021.12.3
-dlimp @ git+https://github.com/kvablack/dlimp@5edaa4691567873d495633f2708982b42edf1972
+transformers == 4.57.6
 plotly >= 5.16.1
 matplotlib
